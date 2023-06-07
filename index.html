@@ -1,12 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>URL Decode</title>
+		<!-- Compiled and minified CSS -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+		/>
+
+		<!-- Compiled and minified JavaScript -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+		<style>
+			.container {
+				margin-top: 5em;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="input-field col s12">
+				<textarea
+					id="urlInput"
+					class="materialize-textarea"
+					rows="20"
+					cols="10"
+          wrap="soft"
+				></textarea>
+				<label for="urlInput">Raw URL:</label>
+			</div>
+
+			<div class="input-field col s6">
+				<input
+					placeholder="Output URL"
+					id="urlOutput"
+					type="text"
+					readonly
+				/>
+				<label for="urlOutput"></label>
+			</div>
+
+			<a id="submitButton" class="waves-effect waves-light btn">GENERATE</a>
+		</div>
+		<script>
+			var button = document.getElementById("submitButton");
+			button.addEventListener("click", function () {
+				var url = document.getElementById("urlInput").value;
+				var decodedURL = decodeURIComponent(url);
+				var queryString = decodedURL.split("?")[1];
+				var params = {};
+
+				if (queryString) {
+					var paramPairs = queryString.split("&");
+
+					for (var i = 0; i < paramPairs.length; i++) {
+						var pair = paramPairs[i].split("=");
+						var key = pair[0];
+						var value = pair[1] || "";
+
+						if (params[key]) {
+							if (Array.isArray(params[key])) {
+								params[key].push(value);
+							} else {
+								params[key] = [params[key], value];
+							}
+						} else {
+							params[key] = value;
+						}
+					}
+				}
+
+				// Example usage:
+				if (params.url) {
+					document.getElementById("urlOutput").value = params.url;
+				}
+			});
+		</script>
+	</body>
 </html>
